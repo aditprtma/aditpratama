@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kamu Cantik Kamu Baik</title>
+  <style>
+    body {
+      background-color: #0f0f23;
+      color: #00ffcc;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 40px;
+      white-space: pre-wrap;
+      font-size: 20px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .lyrics {
+      max-width: 600px;
+      margin: auto;
+      line-height: 1.6;
+      animation: fadeIn 2s ease-in-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .special-text {
+      color: #FFD700;
+    }
+  </style>
+</head>
+<body>
+  <div class="lyrics" id="lyrics"></div>
+
+  <script>
+    const lyrics = [
+      { text: "Karena kamu cantik", delay: 1800 },
+      { text: "Kan kuberi segalanya apa yang kupunya", delay: 2000 },
+      { text: "Dan hatimu baik", delay: 1800 },
+      { text: "Sempurnalah duniaku saat kau di sisiku", delay: 3000 },
+      { text: "Bukan karena make up di wajahmu", delay: 1800 },
+      { text: "Atau lipstik merah itu", delay: 1500 },
+      { text: "Lembut hati tutur kata", delay: 2000 },
+      { text: "Tercipta cinta yang kupunya", delay: 2500 },
+      { text: "hari ini lu cantik banget ree :>", delay: 800, isSpecial: true }
+    ];
+
+    const target = document.getElementById("lyrics");
+
+    async function typeLine(lineData, delayTime) {
+      return new Promise(resolve => {
+        let i = 0;
+        let spanClass = lineData.isSpecial ? 'current-line special-text' : 'current-line';
+        target.innerHTML += `<span class="${spanClass}"></span>`;
+        const currentLineSpan = target.querySelector('.current-line:last-child');
+        const typeInterval = setInterval(() => {
+          if (i < lineData.text.length) {
+            currentLineSpan.textContent += lineData.text[i];
+            i++;
+          } else {
+            clearInterval(typeInterval);
+            currentLineSpan.outerHTML = currentLineSpan.textContent + '\n';
+            setTimeout(resolve, delayTime);
+          }
+        }, 60);
+      });
+    }
+
+    async function runLyrics() {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      for (let part of lyrics) {
+        await typeLine(part, part.delay);
+      }
+    }
+
+    runLyrics();
+  </script>
+</body>
+</html>
